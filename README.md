@@ -1,5 +1,5 @@
 # Torneio de carteiras LMF 2020
-
+![Logo](images/lmf-logo.png)
 > this repository idea is to automate the calculation of rentability in our competition
 
 ## Table of contents
