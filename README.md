@@ -8,7 +8,7 @@
 
 ### Clone
 
-- Clone this repo to your local machine using https://github.com/ItamarRocha/docx-import-model.git
+- Clone this repo to your local machine using https://github.com/ItamarRocha/Torneio-de-carteiras-LMF
 
 ## License
 
