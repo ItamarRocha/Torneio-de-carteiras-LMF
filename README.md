@@ -1,4 +1,5 @@
 # Torneio de carteiras LMF 2020
+[![author](https://img.shields.io/badge/author-ItamarRocha-red.svg)](https://github.com/ItamarRocha) 
 ![Logo](images/lmf-logo.png)
 > this repository idea is to automate the calculation of rentability in our competition
 
