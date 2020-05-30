@@ -10,8 +10,9 @@ import os
 import pandas_datareader as web
 from datetime import date
 
+data_dir = 'Maio'
 
-data_dir = 'newformat_data'
+units = {'BPAC11':42.3,'KLBN11':17.81}
 
 ranking = {
         "Name":[],
@@ -25,7 +26,9 @@ month_init = '2020-04-30'#sys.argv[1]#'2020-' + today.split('-')[1] + '-01'
 
 for file in os.listdir(data_dir):
     
-    df = pd.read_excel(f'{data_dir}/{file}')
+    xls = pd.ExcelFile(f'{data_dir}/{file}')
+    
+    df = pd.read_excel(xls,data_dir)
     
     df.columns = [int(column.split(': ')[1]) for column in df.columns]
     df = df.fillna(value = 0)
@@ -50,13 +53,14 @@ for file in os.listdir(data_dir):
     
     j=0
     for stock in stocks:
-        
         try:
             closing_prices = web.DataReader(stock + '.SA','yahoo',month_init,today)['Close']
             todays_price.append(closing_prices[-1]) #pega apenas a ultima cotação
             if '11' not in stock:
                 print(stock)
                 buy_prices[j] = (closing_prices[0]) #pega o preço de compra
+            elif stock in units:
+                buy_prices[j] = units[stock]
             print(f"{stock} -> buy : {buy_prices[j]}, end : {closing_prices[-1]}")
         except:
             todays_price.append(0)
