@@ -10,6 +10,7 @@ import os
 import pandas_datareader as web
 from datetime import date
 import numpy as np
+import sys
 
 data_dir = 'newformat_data'
 
@@ -21,7 +22,7 @@ ranking = {
 
 today = date.today()
 today = today.strftime("%Y-%m-%d")
-month_init = '2020-' + today.split('-')[1] + '-01'
+month_init = '2020-04-30'#sys.argv[1]#'2020-' + today.split('-')[1] + '-01'
 
 for file in os.listdir(data_dir):
     
@@ -29,10 +30,10 @@ for file in os.listdir(data_dir):
     
     df.columns = [int(column.split(': ')[1]) for column in df.columns]
     df = df.fillna(value = 0)
-    
+    print(file)
     
     stocks = []
-    composition = []
+    #composition = []
     buy_prices = []
     montante = []
     
@@ -45,14 +46,22 @@ for file in os.listdir(data_dir):
     month_initial_value = df.iloc[2, 3]
     
     todays_price = []
+    #buy_prices = []
+    
+    j=0
     for stock in stocks:
+        
         try:
-            todays_price.append(np.round(web.DataReader(stock + '.SA','yahoo',month_init,today)['Close'][-1],2)) #pega apenas a ultima cotação
+            closing_prices = web.DataReader(stock + '.SA','yahoo',month_init,today)['Close']
+            todays_price.append(closing_prices[-1]) #pega apenas a ultima cotação
+            if '11' not in stock:
+                buy_prices[j] = (closing_prices[0]) #pega o preço de compra
+            print(f"{stock} -> buy : {buy_prices[j]}, end : {closing_prices[-1]}")
         except:
             todays_price.append(0)
-            print('not recognized')
-    
-    
+            print(f'{stock} not recognized')
+        j+=1
+        
     stocks_monthly_appreciation = [(today/buy) for buy,today in zip(buy_prices,todays_price) if buy != 0]
     stocks_current_mont = [(mont * appreciation) for mont,appreciation in zip(montante,stocks_monthly_appreciation)]
     
@@ -66,4 +75,5 @@ for file in os.listdir(data_dir):
     ranking['Total'].append(total_appreciation)
     
 final_rank = pd.DataFrame(ranking)
-        
+
+print(final_rank.sort_values(by='Monthly'))
