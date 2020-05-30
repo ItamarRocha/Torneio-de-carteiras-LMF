@@ -9,8 +9,7 @@ import pandas as pd
 import os
 import pandas_datareader as web
 from datetime import date
-import numpy as np
-import sys
+
 
 data_dir = 'newformat_data'
 
@@ -42,6 +41,7 @@ for file in os.listdir(data_dir):
         #composition.append(df.iloc[6+i, 4])
         buy_prices.append(df.iloc[6+i, 5])
         montante.append(df.iloc[6+i, 8])
+        print(df.iloc[6+i, 5])
         
     month_initial_value = df.iloc[2, 3]
     
@@ -55,6 +55,7 @@ for file in os.listdir(data_dir):
             closing_prices = web.DataReader(stock + '.SA','yahoo',month_init,today)['Close']
             todays_price.append(closing_prices[-1]) #pega apenas a ultima cotação
             if '11' not in stock:
+                print(stock)
                 buy_prices[j] = (closing_prices[0]) #pega o preço de compra
             print(f"{stock} -> buy : {buy_prices[j]}, end : {closing_prices[-1]}")
         except:
