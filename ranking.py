@@ -10,9 +10,10 @@ import os
 import pandas_datareader as web
 from datetime import date
 
-data_dir = 'Maio'
+data_dir = 'Junho'
 
-units = {'BPAC11':42.3,'KLBN11':17.81}
+units = {'BPAC11':48.84,'KLBN11':19.56,'SAPR11':27.60,'TAEE11':28.75	,
+         'TIET11':13.73}
 
 ranking = {
         "Name":[],
@@ -22,7 +23,7 @@ ranking = {
 
 today = date.today()
 today = today.strftime("%Y-%m-%d")
-month_init = '2020-04-30'#sys.argv[1]#'2020-' + today.split('-')[1] + '-01'
+month_init = '2020-05-29'#sys.argv[1]#'2020-' + today.split('-')[1] + '-01'
 
 for file in os.listdir(data_dir):
     
@@ -54,6 +55,7 @@ for file in os.listdir(data_dir):
     j=0
     for stock in stocks:
         try:
+            stock = stock.strip() #remove white spaces
             closing_prices = web.DataReader(stock + '.SA','yahoo',month_init,today)['Close']
             todays_price.append(closing_prices[-1]) #pega apenas a ultima cotação
             if '11' not in stock:
