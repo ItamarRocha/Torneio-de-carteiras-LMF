@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -14,6 +15,8 @@ data_dir = 'Junho'
 
 units = {'BPAC11':48.84,'KLBN11':19.56,'SAPR11':27.60,'TAEE11':28.75	,
          'TIET11':13.73}
+
+stocks_dict = {}
 
 ranking = {
         "Name":[],
@@ -56,14 +59,18 @@ for file in os.listdir(data_dir):
     for stock in stocks:
         try:
             stock = stock.strip() #remove white spaces
-            closing_prices = web.DataReader(stock + '.SA','yahoo',month_init,today)['Close']
-            todays_price.append(closing_prices[-1]) #pega apenas a ultima cotação
+            if stock not in stocks_dict:
+                closing_prices = web.DataReader(stock + '.SA','yahoo',month_init,today)['Close']
+                todays_price.append(closing_prices[-1]) #pega apenas a ultima cotação
+                stocks_dict[stock] = closing_prices
+            else:
+                todays_price.append(stocks_dict[stock][-1])
+                
             if '11' not in stock:
-                print(stock)
-                buy_prices[j] = (closing_prices[0]) #pega o preço de compra
+                buy_prices[j] = (stocks_dict[stock][0]) #pega o preço de compra
             elif stock in units:
                 buy_prices[j] = units[stock]
-            print(f"{stock} -> buy : {buy_prices[j]}, end : {closing_prices[-1]}")
+            print(f"{stock} -> buy : {buy_prices[j]}, end : {stocks_dict[stock][-1]}")
         except:
             todays_price.append(0)
             print(f'{stock} not recognized')
@@ -84,3 +91,11 @@ for file in os.listdir(data_dir):
 final_rank = pd.DataFrame(ranking)
 
 print(final_rank.sort_values(by='Monthly'))
+
+relation_open_close = pd.DataFrame()
+for stock in stocks_dict:
+    relation_open_close[stock] = pd.Series([stocks_dict[stock][0],stocks_dict[stock][-1]])
+    
+relation_open_close = relation_open_close.T
+relation_open_close.to_csv("cotacoes.csv")
+final_rank.to_csv("rank_final.csv")
