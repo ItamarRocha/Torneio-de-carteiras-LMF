@@ -11,10 +11,10 @@ import os
 import pandas_datareader as web
 from datetime import date
 
-data_dir = 'Junho'
+data_dir = 'Julho'
 
-units = {'BPAC11':48.84,'KLBN11':19.56,'SAPR11':27.60,'TAEE11':28.75	,
-         'TIET11':13.73}
+#units = {'BPAC11':48.84,'KLBN11':19.56,'SAPR11':27.60,'TAEE11':28.75	,
+#         'TIET11':13.73}
 
 stocks_dict = {}
 
@@ -26,7 +26,7 @@ ranking = {
 
 today = date.today()
 today = today.strftime("%Y-%m-%d")
-month_init = '2020-05-29'#sys.argv[1]#'2020-' + today.split('-')[1] + '-01'
+month_init = '2020-06-30'#sys.argv[1]#'2020-' + today.split('-')[1] + '-01'
 
 for file in os.listdir(data_dir):
     
@@ -66,10 +66,10 @@ for file in os.listdir(data_dir):
             else:
                 todays_price.append(stocks_dict[stock][-1])
                 
-            if '11' not in stock:
-                buy_prices[j] = (stocks_dict[stock][0]) #pega o preço de compra
-            elif stock in units:
-                buy_prices[j] = units[stock]
+            #if '11' not in stock:
+            buy_prices[j] = (stocks_dict[stock][0]) #pega o preço de compra
+            #elif stock in units:
+            #    buy_prices[j] = units[stock]
             print(f"{stock} -> buy : {buy_prices[j]}, end : {stocks_dict[stock][-1]}")
         except:
             todays_price.append(0)
