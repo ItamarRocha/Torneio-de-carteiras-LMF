@@ -25,7 +25,7 @@ ranking = {
         }
 
 today = date.today()
-today = today.strftime("%Y-%m-%d")
+today = '2020-07-31'#today.strftime("%Y-%m-%d")
 month_init = '2020-06-30'#sys.argv[1]#'2020-' + today.split('-')[1] + '-01'
 
 for file in os.listdir(data_dir):
